@@ -4,27 +4,47 @@ export default function UseTimeTravel() {
   // const history = useState([])
   // const [currentValue, setCurrentValue] = useState(null)
 
-  const [timeTravel, setTimeTravel] = useState({
+  const [timeTravelData, setTimeTravelData] = useState({
     history: [],
-    currentValue: history[0]
+    currentValue: history[(currentIndex)],
+    currentIndex: history.length -1
   })
 
-  useEffect(() => {
+//   useEffect(() => {
 //  history, currentValue ? 
-  }, [history])
+//   }, [history])
 
   const handleChange = (event) => {
     const { name, value } = event.target;
 
     switch(name){
       case 'undo':
-        setTimeTravel((prevState) => {
+        setTimeTravelData((prevState) => {
           return {
             ...prevState,
-            history: history.push(history[(history.length - 2)]),
-            currentValue: history[(history.length -1)]
-          }
-        })
+            history: history.push(history[(currentIndex - 1)]),
+            currentValue: history[(currentIndex)]
+          };
+        });
+        break;
+      case 'redo':
+        setTimeTravelData((prevState) => {
+          return {
+            ...prevState,
+            history: history.push(history[(currentIndex - 2 )]),
+            currentValue: history[(currentIndex)]
+          };
+        });
+        break;
+      case 'date':
+         setTimeTravelData((prevState) => {
+           return {
+            ...prevState,
+             history: history.push(value),
+             currentValue: history[(currentIndex)]
+          };
+        });
+       break;
 
     }
   }
@@ -35,5 +55,5 @@ export default function UseTimeTravel() {
 
   {/* undo/redo = array.push, array[array.length -2] */}
 
-  return 
+  return [timeTravelData, handleChange]
 }
