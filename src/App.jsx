@@ -1,7 +1,21 @@
 import useTimeTravel from './hooks/useTimeTravel';
-
+import { useEffect, useState } from 'react';
 export default function App() {
-  const handleChange = useTimeTravel();
+  const [handleChange, history, index] = useTimeTravel();
+  const [currentDate, setCurrentDate] = useState('');
+
+  useEffect(() => {
+    setCurrentDate(history[history.length - 1]);
+  }, [index]);
+
+  console.log(
+    'current date:',
+    currentDate,
+    'history:',
+    history,
+    'index:',
+    index
+  );
   return (
     <>
       <p>
@@ -23,6 +37,7 @@ export default function App() {
           onChange={(e) => handleChange(e)}
         />
       </p>
+      {currentDate}
     </>
   );
 }
