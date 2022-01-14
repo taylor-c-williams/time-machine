@@ -1,59 +1,44 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 
 export default function UseTimeTravel() {
-  // const history = useState([])
-  // const [currentValue, setCurrentValue] = useState(null)
+  // const [timeData, setTimeData] = useState({
+  //   history: [],
+  //   index: -1,
+  // });
+  // const { history, index } = timeData;
 
-  const [timeTravelData, setTimeTravelData] = useState({
-    history: [],
-    currentValue: history[(currentIndex)],
-    currentIndex: history.length -1
-  })
+  const [history, setHistory] = useState([]);
+  const [index, setIndex] = useState(0);
+  const [currentDate, setCurrentDate] = useState();
 
-//   useEffect(() => {
-//  history, currentValue ? 
-//   }, [history])
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-
-    switch(name){
-      case 'undo':
-        setTimeTravelData((prevState) => {
-          return {
-            ...prevState,
-            history: history.push(history[(currentIndex - 1)]),
-            currentValue: history[(currentIndex)]
-          };
-        });
-        break;
-      case 'redo':
-        setTimeTravelData((prevState) => {
-          return {
-            ...prevState,
-            history: history.push(history[(currentIndex - 2 )]),
-            currentValue: history[(currentIndex)]
-          };
-        });
-        break;
-      case 'date':
-         setTimeTravelData((prevState) => {
-           return {
-            ...prevState,
-             history: history.push(value),
-             currentValue: history[(currentIndex)]
-          };
-        });
-       break;
-
-    }
+  function save(value) {
+    setHistory((prevState) => [
+      ...prevState.slice(0, index + 1),
+      value,
+      ...prevState.slice(index + 1, prevState.length + 1),
+    ]);
+    setIndex((prevState) => prevState + 1);
   }
 
-  {/* track history in an array */}
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case 'date':
+        save(value);
+        setCurrentDate(value);
+        console.log(history, index, currentDate);
+        break;
 
-  {/* array.length-1 = currentValue */}
+      case 'redo':
+        setIndex(index + 1);
+        console.log(history, index);
+        break;
 
-  {/* undo/redo = array.push, array[array.length -2] */}
-
-  return [timeTravelData, handleChange]
+      case 'undo':
+        setIndex(index - 1);
+        console.log(history, index);
+        break;
+    }
+  };
+  return handleChange;
 }
