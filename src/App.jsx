@@ -1,30 +1,24 @@
 import useTimeTravel from './hooks/useTimeTravel';
-import { useEffect, useState } from 'react';
 export default function App() {
   const [handleChange, history, index] = useTimeTravel();
-  const [currentDate, setCurrentDate] = useState('');
 
-  useEffect(() => {
-    setCurrentDate(history[history.length - 1]);
-  }, [index]);
-
-  console.log(
-    'current date:',
-    currentDate,
-    'history:',
-    history,
-    'index:',
-    index
-  );
   return (
     <>
       <p>
-        <button onClick={(e) => handleChange(e)} name="undo">
+        <button
+          onClick={({ target }) => handleChange(target)}
+          aria-label="undo"
+          name="undo"
+        >
           Undo
         </button>
       </p>
       <p>
-        <button onClick={(e) => handleChange(e)} name="redo">
+        <button
+          onClick={({ target }) => handleChange(target)}
+          aria-label="redo"
+          name="redo"
+        >
           Redo
         </button>
       </p>
@@ -32,12 +26,12 @@ export default function App() {
         <input
           type="date"
           name="date"
-          label="date"
+          aria-label="date-input"
           required
-          onChange={(e) => handleChange(e)}
+          onChange={({ target }) => handleChange(target)}
         />
       </p>
-      {currentDate}
+      {history[index]}
     </>
   );
 }
